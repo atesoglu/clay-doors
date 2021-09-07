@@ -1,0 +1,155 @@
+{
+	"info": {
+		"_postman_id": "9e95d833-0d6f-41f0-bb23-35a6eb16237c",
+		"name": "Clay-Doors",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "~/health-checks",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/health-checks",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"health-checks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "~/connect/token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response = pm.response;\r",
+							"const json = pm.response.json();\r",
+							"\r",
+							"pm.test(\"success-result\", function () {\r",
+							"    response.to.have.status(200);\r",
+							"    \r",
+							"    pm.collectionVariables.set(\"clay-doors-email\", json.email);\r",
+							"    pm.collectionVariables.set(\"clay-doors-access-token\", json.access_token);\r",
+							"    pm.collectionVariables.set(\"clay-doors-refresh-token\", json.refresh_token);\r",
+							"    pm.collectionVariables.set(\"clay-doors-access-token-expires\", new Date(new Date().getTime() + (parseInt(json.expires) * 1000)));\r",
+							"    pm.collectionVariables.set(\"clay-doors-refresh-token-expires-at\", new Date(json.refresh_token_expires_at));\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"user1@domain.com\",\r\n    \"password\": \"password\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/connect/token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"connect",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "~/request-access",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{clay-doors-access-token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"address\": \"Tunnel Door\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/request-access",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"request-access"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "clay-doors-email",
+			"value": ""
+		},
+		{
+			"key": "j4m-access-token",
+			"value": ""
+		},
+		{
+			"key": "j4m-refresh-token",
+			"value": ""
+		},
+		{
+			"key": "j4m-access-token-expires",
+			"value": ""
+		},
+		{
+			"key": "j4m-refresh-token-expires-at",
+			"value": ""
+		},
+		{
+			"key": "clay-doors-access-token",
+			"value": ""
+		},
+		{
+			"key": "clay-doors-refresh-token",
+			"value": ""
+		},
+		{
+			"key": "clay-doors-access-token-expires",
+			"value": ""
+		},
+		{
+			"key": "clay-doors-refresh-token-expires-at",
+			"value": ""
+		}
+	]
+}
